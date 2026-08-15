@@ -20,13 +20,15 @@ jobs:
         run: dotnet workload install android
 
       - name: Restore
-        run: dotnet restore
+        working-directory: UABEA++
+        run: dotnet restore UABEA++.sln
 
       - name: Build UABEA++
+        working-directory: UABEA++
         run: dotnet publish UABEA++.Android/UABEA++.Android.csproj -c Release -f net8.0-android -r android-arm64 --self-contained true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: UABEA++-APK
-          path: '**/*.apk'
+          path: 'UABEA++/**/*.apk'
