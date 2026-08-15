@@ -1,0 +1,37 @@
+name: Build UABEA++
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install Android workload
+        run: dotnet workload install android
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build APK
+        run: |
+          dotnet publish UABEA++.Android/UABEA++.Android.csproj \
+            -c Release \
+            -f net8.0-android \
+            -r android-arm64 \
+            --self-contained true
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: UABEA++-APK
+          path: '**/*.apk'
