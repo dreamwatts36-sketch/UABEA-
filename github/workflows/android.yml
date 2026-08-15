@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install .NET 8
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -22,13 +22,8 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      - name: Build APK
-        run: |
-          dotnet publish UABEA++.Android/UABEA++.Android.csproj \
-            -c Release \
-            -f net8.0-android \
-            -r android-arm64 \
-            --self-contained true
+      - name: Build UABEA++
+        run: dotnet publish UABEA++.Android/UABEA++.Android.csproj -c Release -f net8.0-android -r android-arm64 --self-contained true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
